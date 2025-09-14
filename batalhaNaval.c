@@ -1,14 +1,56 @@
 #include <stdio.h>
 
-// Desafio Batalha Naval - MateCheck
-// Este código inicial serve como base para o desenvolvimento do sistema de Batalha Naval.
-// Siga os comentários para implementar cada parte do desafio.
-
 int main() {
-    // Nível Novato - Posicionamento dos Navios
-    // Sugestão: Declare uma matriz bidimensional para representar o tabuleiro (Ex: int tabuleiro[5][5];).
-    // Sugestão: Posicione dois navios no tabuleiro, um verticalmente e outro horizontalmente.
-    // Sugestão: Utilize `printf` para exibir as coordenadas de cada parte dos navios.
+    char colunas[10]= {'A','B','C','D','E','F','G','H','I','J'};
+    int tabuleiro[10][10]={0};
+    int navio1[3]={3, 3, 3};
+    int navio2[3]={3, 3, 3};
+
+    printf(" ### Tabuleiro Batalha Naval ###\n");
+
+    //Colunas de A-J
+    printf("   ");
+    for(int c=0; c<10; c++){
+        printf("%c  ", colunas[c]);
+    }
+    printf("\n");
+    
+    //exibição dos návios no tabuleiro (número '3') sem sobreposição e sem ultrapassar o limite do tabuleiro
+    for(int n1=0; n1<3; n1++){
+        if(5+n1<10){
+            if(tabuleiro[6][5+n1] == 0){
+                tabuleiro[6][5+n1]= navio1[n1];
+            } else {
+                printf("Sobreposição detectada!\n");
+            } 
+        } else {
+            printf("Você ultrapassou o limite do tabuleiro\n");
+        }
+    };
+
+    for(int n2=0; n2<3; n2++){
+        if(1+n2<10){
+            if(tabuleiro[1+n2][1] == 0){
+                tabuleiro[1+n2][1]= navio2[n2];
+            } else {
+                printf("Sobreposição detectada!\n");
+            }
+        } else {
+            printf("Você ultrapassou o limite do tabuleiro\n");
+        }
+    };
+
+    //exibição do tabuleiro + numero de linhas
+    for(int i=0; i<10; i++){
+        printf("%2d ",i+1);
+        for(int j=0; j<10; j++){
+            printf("%d  ", tabuleiro[i][j]);
+        }
+        printf("\n");
+    }
+
+    return 0;
+}
 
     // Nível Aventureiro - Expansão do Tabuleiro e Posicionamento Diagonal
     // Sugestão: Expanda o tabuleiro para uma matriz 10x10.
@@ -35,6 +77,3 @@ int main() {
     // 0 0 1 0 0
     // 1 1 1 1 1
     // 0 0 1 0 0
-
-    return 0;
-}
