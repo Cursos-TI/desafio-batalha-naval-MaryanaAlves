@@ -1,79 +1,121 @@
 #include <stdio.h>
 
+#define LINHAS 10
+#define COLUNAS 10
+#define LINHAHAB 3
+#define COLUNAHAB 5
+
 int main() {
-    char colunas[10]= {'A','B','C','D','E','F','G','H','I','J'};
-    int tabuleiro[10][10]={0};
+    char colunasLetras[LINHAS]= {'A','B','C','D','E','F','G','H','I','J'};
+    int tabuleiro[LINHAS][COLUNAS]={0};
     int navio1[3]={3, 3, 3};
     int navio2[3]={3, 3, 3};
 
-    printf(" ### Tabuleiro Batalha Naval ###\n");
+    printf(" ### Tabuleiro Batalha Naval antes das *Habilidades* ###\n");
 
     //Colunas de A-J
     printf("   ");
-    for(int c=0; c<10; c++){
-        printf("%c  ", colunas[c]);
+    for(int c=0;c<10;c++){
+        printf("%c  ", colunasLetras[c]);
     }
     printf("\n");
-    
-    //exibição dos návios no tabuleiro (número '3') sem sobreposição e sem ultrapassar o limite do tabuleiro
-    for(int n1=0; n1<3; n1++){
-        if(5+n1<10){
-            if(tabuleiro[6][5+n1] == 0){
-                tabuleiro[6][5+n1]= navio1[n1];
-            } else {
-                printf("Sobreposição detectada!\n");
-            } 
-        } else {
-            printf("Você ultrapassou o limite do tabuleiro\n");
-        }
-    };
 
-    for(int n2=0; n2<3; n2++){
-        if(1+n2<10){
-            if(tabuleiro[1+n2][1] == 0){
-                tabuleiro[1+n2][1]= navio2[n2];
-            } else {
-                printf("Sobreposição detectada!\n");
-            }
-        } else {
-            printf("Você ultrapassou o limite do tabuleiro\n");
+    //navio 1 na horizontal
+    for(int n=0;n<3;n++){
+        int linha=6, coluna=5+n;
+        if(linha>=0 && linha<10 && coluna>=0 && coluna<10){
+            if(tabuleiro[linha][coluna]==0) tabuleiro[linha][coluna]=3;
         }
-    };
+    }
+
+    //navio 2 na vertical
+    for(int n=0;n<3;n++){
+        int linha=1+n, coluna=1;
+        if(linha>=0 && linha<10 && coluna>=0 && coluna<10){
+            if(tabuleiro[linha][coluna]==0) tabuleiro[linha][coluna]=3;
+        }
+    }
+
+    //navio 3 na diagonal
+    for(int n=0;n<3;n++){
+        int linha=7+n, coluna=0+n;
+        if(linha>=0 && linha<10 && coluna>=0 && coluna<10){
+            if(tabuleiro[linha][coluna]==0) tabuleiro[linha][coluna]=3;
+        }
+    }
+
+    //navio 4 na diagonal
+    for(int n=0;n<3;n++){
+        int linha=3-n, coluna=7-n;
+        if(linha>=0 && linha<10 && coluna>=0 && coluna<10){
+            if(tabuleiro[linha][coluna]==0) tabuleiro[linha][coluna]=3;
+        }
+    }
 
     //exibição do tabuleiro + numero de linhas
-    for(int i=0; i<10; i++){
+    for(int i=0;i<10;i++){
         printf("%2d ",i+1);
-        for(int j=0; j<10; j++){
-            printf("%d  ", tabuleiro[i][j]);
+        for(int j=0;j<10;j++){
+            printf("%d  ",tabuleiro[i][j]);
+        }
+        printf("\n");
+    }
+
+    printf(" ### Tabuleiro Batalha Naval depois das *Habilidades* ###\n");
+
+    //logica do cone
+    int origemLinhaCone = 3;
+    int origemColunaCone = 4;
+    for(int i=0;i<LINHAHAB;i++){
+        for(int j=0;j<COLUNAHAB;j++){
+            if(j>=2-i && j<=2+i){
+                int linha=origemLinhaCone+i;
+                int coluna=origemColunaCone+j;
+                if(linha>=0 && linha<10 && coluna>=0 && coluna<10){
+                    tabuleiro[linha][coluna]=5;
+                }
+            }
+        }
+    }
+
+    //logica da cruz
+    int origemLinhaCruz = 1;
+    int origemColunaCruz = 2;
+    for(int i=0;i<LINHAHAB;i++){
+        for(int j=0;j<COLUNAHAB;j++){
+            if(i==1 || j==2){
+                int linha = origemLinhaCruz + i - 1;
+                int coluna = origemColunaCruz + j - 2;
+                if(linha>=0 && linha<10 && coluna>=0 && coluna<10){
+                    tabuleiro[linha][coluna]=5;
+                }
+            }
+        }
+    }
+
+    //logica do octaedro
+    int origemLinha = 7;
+    int origemColuna = 2;
+    for(int i=0;i<3;i++){
+        for(int j=0;j<5;j++){
+            if( (i==0 && j==2) || (i==1 && (j>=1 && j<=3)) || (i==2 && j==2)){
+                int linha = origemLinha-1+i;
+                int coluna = origemColuna-2+j;
+                if(linha>=0 && linha<10 && coluna>=0 && coluna<10){
+                    tabuleiro[linha][coluna]=5;
+                }
+            }
+        }
+    }
+
+    //exibição do tabuleiro final
+    for(int i=0;i<10;i++){
+        printf("%2d ",i+1);
+        for(int j=0;j<10;j++){
+            printf("%d  ",tabuleiro[i][j]);
         }
         printf("\n");
     }
 
     return 0;
 }
-
-    // Nível Aventureiro - Expansão do Tabuleiro e Posicionamento Diagonal
-    // Sugestão: Expanda o tabuleiro para uma matriz 10x10.
-    // Sugestão: Posicione quatro navios no tabuleiro, incluindo dois na diagonal.
-    // Sugestão: Exiba o tabuleiro completo no console, mostrando 0 para posições vazias e 3 para posições ocupadas.
-
-    // Nível Mestre - Habilidades Especiais com Matrizes
-    // Sugestão: Crie matrizes para representar habilidades especiais como cone, cruz, e octaedro.
-    // Sugestão: Utilize estruturas de repetição aninhadas para preencher as áreas afetadas por essas habilidades no tabuleiro.
-    // Sugestão: Exiba o tabuleiro com as áreas afetadas, utilizando 0 para áreas não afetadas e 1 para áreas atingidas.
-
-    // Exemplos de exibição das habilidades:
-    // Exemplo para habilidade em cone:
-    // 0 0 1 0 0
-    // 0 1 1 1 0
-    // 1 1 1 1 1
-    
-    // Exemplo para habilidade em octaedro:
-    // 0 0 1 0 0
-    // 0 1 1 1 0
-    // 0 0 1 0 0
-
-    // Exemplo para habilidade em cruz:
-    // 0 0 1 0 0
-    // 1 1 1 1 1
-    // 0 0 1 0 0
